@@ -40,7 +40,7 @@ func DefaultConfig() *Config {
 		ApiListenAddr:    "127.0.0.1",
 		ApiListenPort:    5555,
 		ApiSecretKey:     defaultSecretKey,
-		BeaconClientAddr: "http://localhost:3500",
+		BeaconClientAddr: "http://localhost:4500",
 		LogOutput:        os.Stdout,
 	}
 }
@@ -423,26 +423,37 @@ type Spec struct {
 }
 
 func getSpec(beaconURL string) (*Spec, error) {
-	uri := fmt.Sprintf("%s/eth/v1/config/spec", beaconURL)
+	return &Spec{
+		SecondsPerSlot:                  2,
+		DepositNetworkID:                "80087",
+		DepositContractAddress:          "0x4242424242424242424242424242424242424242",
+		InactivityPenaltyQuotient:       "1",
+		InactivityPenaltyQuotientAltair: "1",
+		DomainAggregateAndProof:         "",
+		BellatrixForkVersion:            "0x02000000",
+		DenebForkVersion:                "0x02000000",
+		CapellaForkVersion:              "0x02000000",
+	}, nil
+	// uri := fmt.Sprintf("%s/eth/v1/config/spec", beaconURL)
 
-	resp, err := http.Get(uri)
-	if err != nil {
-		return nil, err
-	}
+	// resp, err := http.Get(uri)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	defer resp.Body.Close()
+	// defer resp.Body.Close()
 
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
+	// data, err := io.ReadAll(resp.Body)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	var spec struct {
-		Data *Spec `json:"data"`
-	}
-	if err := json.Unmarshal(data, &spec); err != nil {
-		return nil, err
-	}
+	// var spec struct {
+	// 	Data *Spec `json:"data"`
+	// }
+	// if err := json.Unmarshal(data, &spec); err != nil {
+	// 	return nil, err
+	// }
 
-	return spec.Data, nil
+	// return spec.Data, nil
 }
